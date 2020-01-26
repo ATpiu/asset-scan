@@ -1,0 +1,29 @@
+version: 1.0
+nmap:
+  path:                          #不指定则使用系统默认的nmap
+
+masscan:
+  path:                          #不指定则使用系统默认的masscan
+  rate: 5000                     #masscan扫描速度，不建议设很大
+
+es:
+  address: 127.0.0.1:9200        #elasticsearch地址
+
+scan:
+  ipFile: ip.txt                 #包含扫描的ip范围文件，文件内容格式参照nmap -iL参数所支持的格式
+  ipexcludeFile: ipExclude.txt  #包含需排除的ip范围文件，文件内容格式参照nmap --excludefile参数所支持的格式
+  port: 1-65535                  #扫描端口范围
+  userDict: user.txt             #对服务进行弱口令爆破的用户名字典
+  passwordDict: password.txt     #对服务进行弱口令爆破的密码字典
+  scan_interval: 30              #扫描间隔，单位：秒
+
+observe:
+  switch: on                     #观察者模式开关：（1）开启:on （2）关闭:off
+
+mail:                            #告警邮箱设置，若观察者模式开启，可不配置
+  host: xxx.xxx.com
+  port: 123
+  username: xxx@xxx.com
+  password: xxx
+  from: xxx@xxx.com
+  to: ["xxx@xxx.com","xxx@xxx.com"]
