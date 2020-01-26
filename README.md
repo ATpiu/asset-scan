@@ -9,7 +9,8 @@ asset-scan用于甲方企业外网资产进行周期性扫描监控，对资产�
 结合kibana，使用者可随时搜索企业外网资产暴露的端口、服务和版本等信息;制作各类统计图，进行开放端口统计、新增服务版本分析和资产扫描耗时统计等;
 使用Dashboard进行内部汇报展示等
 
-目前支持ssh、redis、mysql、ftp、mongodb、postgresql和mssql七种服务的弱口令爆破，另外支持mongod、redis和memcached的未授权访问测试
+目前支持`ssh`、`redis`、`mysql`、`ftp`、`mongodb`、`postgresql`和`mssql`七种服务的弱口令爆破，另外支持`mongod`、`redis`和
+`memcached`的未授权访问测试
 
 **请使用者遵守《中华人民共和国网络安全法》，勿用于非授权的测试。**
 
