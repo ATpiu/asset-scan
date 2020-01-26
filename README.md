@@ -58,7 +58,7 @@ mail:                            #告警邮箱设置，若观察者模式始终�
 
 ## 运行指南
 
-- Linux环境运行，运行需要Nmap、Masscan、Es和Kibana 5.6.x版本，安装指南详见：[安装指南](./doc/install.md)
+- Linux环境运行，需要Nmap、Masscan、Es和Kibana 5.6.x版本，安装指南详见：[安装指南](./doc/install.md)
 - 所需组件安装完毕后，对config.yaml进行配置，之后直接输入`./asset-scan`运行
 - 扫描初期，建议将config.yaml中的观察者模式开关设为`on`,避免造成告警轰炸
 
