@@ -62,7 +62,7 @@ mail:                            #告警邮箱设置，若观察者模式始终�
 - 所需组件安装完毕后，对config.yaml进行配置，ip.txt中填入要扫描的IP段（格式参照nmap -iL参数所支持的格式），之后直接输入`./asset-scan`运行
 - 扫描初期，建议将config.yaml中的观察者模式开关设为`on`,避免造成告警轰炸
 
-## es字段说明
+## Es字段说明
 
 目前Es中有5个type：
 - result
