@@ -66,7 +66,7 @@ mail:                            #告警邮箱设置，若观察者模式始终�
 - Linux环境运行，需要Nmap、Masscan、Es和Kibana 5.6.x版本，安装指南详见：[安装指南](./doc/install.md)
 - 所需组件安装完毕后，从release中下载压缩包，对config.yaml进行配置，ip.txt中填入要扫描的IP段（格式参照nmap -iL参数所支持的格式），之后可直接输入`./asset-scan`运行
 - 扫描初期，建议将config.yaml中的观察者模式开关设为`on`,避免造成告警轰炸（有新服务对外开放或暴力破解成功会发告警邮件）
-- ipExclude.txt中为要排除扫描的IP段，user.txt和password.txt分别为用户名字段和密码字典
+- ipExclude.txt中为要排除扫描的IP段，user.txt和password.txt分别为用户名字典和密码字典
 
 ## Es字段说明
 

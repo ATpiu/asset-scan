@@ -22,7 +22,7 @@
 
 - Centos安装java环境
 
-yum -y install java-1.8.0-openjdk*
+```yum -y install java-1.8.0-openjdk*```
 
 - 下载Es并解压
 

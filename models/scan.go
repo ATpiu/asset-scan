@@ -261,8 +261,26 @@ func (s *Scanner) judgeExist(results []nmap.NmapResult, m masscan.Host) {
 			},
 			Time: lib.GetUnixTime(),
 		}
+		esAddData := EsAddSave{
+			AddData: map[string]interface{}{
+				"ip":                esSaveData.Data["ip"],
+				"port":              esSaveData.Data["port"],
+				"protocol":          esSaveData.Data["protocol"],
+				"service":           esSaveData.Data["service"],
+				"product":           esSaveData.Data["product"],
+				"version":           esSaveData.Data["version"],
+				"masscan_starttime": m.StartTime,
+				"masscan_endtime":   m.Endtime,
+				"masscan_time":      fmt.Sprintf("%.2f", float64(mEndTime)/1000-float64(mStartTime)/1000),
+				"nmap_starttime":    v.StartTime,
+				"nmap_endtime":      v.EndTime,
+				"nmap_time":         fmt.Sprintf("%.2f", float64(nEndTime)/1000-float64(nStartTime)/1000),
+			},
+			Time: lib.GetUnixTime(),
+		}
 		//先持久化
 		InsertEs("result", esSaveData)
+		InsertEsAdd("addhistory", esAddData)
 		//检查最近的一次扫描中是否有相同记录
 		isExist, esTmp := isExist(v.Ip, strconv.Itoa(v.PortId), v.Protocol, v.Service, v.Product, v.Version, m.LastScanTime, m.LastScanEndTime)
 		fmt.Println("isExist:", isExist)
@@ -296,26 +314,7 @@ func (s *Scanner) judgeExist(results []nmap.NmapResult, m masscan.Host) {
 				}
 				InsertEsUp("uphistory", esUpData)
 			}
-
 		} else {
-			esAddData := EsAddSave{
-				AddData: map[string]interface{}{
-					"ip":                esSaveData.Data["ip"],
-					"port":              esSaveData.Data["port"],
-					"protocol":          esSaveData.Data["protocol"],
-					"service":           esSaveData.Data["service"],
-					"product":           esSaveData.Data["product"],
-					"version":           esSaveData.Data["version"],
-					"masscan_starttime": m.StartTime,
-					"masscan_endtime":   m.Endtime,
-					"masscan_time":      fmt.Sprintf("%.2f", float64(mEndTime)/1000-float64(mStartTime)/1000),
-					"nmap_starttime":    v.StartTime,
-					"nmap_endtime":      v.EndTime,
-					"nmap_time":         fmt.Sprintf("%.2f", float64(nEndTime)/1000-float64(nStartTime)/1000),
-				},
-				Time: lib.GetUnixTime(),
-			}
-			InsertEsAdd("addhistory", esAddData)
 			//判断当前是否为观察模式
 			if s.Conf.Observe.Sw != "on" {
 				go SendMail(s.Conf.Mail, "[*]外网资产新增端口告警", "Ip: "+v.Ip+"<br>"+"Port: "+strconv.Itoa(v.PortId)+"<br>"+"Protocol: "+v.Protocol+"<br>"+"Service:"+v.Service+"<br>"+"Product: "+v.Product+"<br>"+"Version: "+v.Version+"<br>")
