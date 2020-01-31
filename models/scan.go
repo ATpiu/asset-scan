@@ -174,7 +174,7 @@ func (s *Scanner) GetLastScanTime(dataType string) (string, string) {
 
 func (s *Scanner) MasDistribute(lastScanTime string, lastScanEndTime string) {
 	wg := &sync.WaitGroup{}
-	pool, _ := ants.NewPoolWithFunc(30, func(i interface{}) {
+	pool, _ := ants.NewPoolWithFunc(5, func(i interface{}) {
 		defer wg.Done()
 		s.MasRun(i.(*masscan.Masscan))
 		return
