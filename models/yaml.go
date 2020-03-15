@@ -59,6 +59,10 @@ func (s *Scanner) yamlCheck() {
 	if s.Conf.Nmap.Path == "" {
 		s.Conf.Nmap.Path = "nmap"
 	}
+	//masscan和nmap数量check
+	if s.Conf.S.MasNum <=0 || s.Conf.S.NmapNum <=0 {
+		lib.FatalError("mas_num或nmap_num项配置错误")
+	}
 	//扫描和排除ip段解析 todo:nmap格式校验
 	s.IpSet = NewIpSet()
 	s.IpSet.ProcessIp(s.Conf.S.IpFile, s.Conf.S.IpExcludeFile)

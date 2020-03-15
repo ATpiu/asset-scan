@@ -34,8 +34,8 @@ type Host struct {
 	Endtime         string  `xml:"endtime,attr"`
 	Address         Address `xml:"address"`
 	Ports           Ports   `xml:"ports>port"`
-	LastScanTime    string
-	LastScanEndTime string
+	LastScanTime    int
+	LastScanEndTime int
 }
 type Ports []struct {
 	Protocol string  `xml:"protocol,attr"`
@@ -57,8 +57,8 @@ type Masscan struct {
 	Rate            string
 	Exclude         string
 	Result          []byte
-	LastScanTime    string
-	LastScanEndTime string
+	LastScanTime    int
+	LastScanEndTime int
 }
 
 func New() *Masscan {

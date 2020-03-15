@@ -19,6 +19,10 @@ type Scanner struct {
 	IpSet     *Set
 	MTcp      *masscan.Masscan
 	MUdp      *masscan.Masscan
+	MasStartTime string
+	MasEndTime string
+	NmapStartTime string
+	NmapEndTime string
 	StartTime string
 	EndTime   string
 	Conf      *Config
@@ -40,6 +44,8 @@ type Scan struct {
 	PassList      string `yaml:"passwordDict"`
 	ScanInterval  int    `yaml:"scan_interval"`
 	Port          string `yaml:"port"`
+	MasNum        int    `yaml:"mas_num"`
+	NmapNum       int    `yaml:"nmap_num"`
 }
 
 type NmapScan struct {
@@ -79,8 +85,11 @@ func (s *Scanner) StartScan() (err error) {
 		fmt.Println("[*]Start scan:", s.StartTime)
 
 		lastScanTime, lastScanEndTime := s.GetLastScanTime("scanhistory")
+		s.MasStartTime = lib.GetUnixTime()
 		go s.MasDistribute(lastScanTime, lastScanEndTime)
+		s.NmapStartTime = lib.GetUnixTime()
 		s.NmapDistribute()
+		s.NmapEndTime = lib.GetUnixTime()
 
 		StartTime, _ := strconv.Atoi(s.StartTime)
 		EndTime, _ := strconv.Atoi(s.EndTime)
@@ -88,6 +97,10 @@ func (s *Scanner) StartScan() (err error) {
 			Data: map[string]interface{}{
 				"starttime": StartTime,
 				"endtime":   EndTime,
+				"masscan_starttime":s.MasStartTime,
+				"masscan_endtime":s.MasEndTime,
+				"nmap_starttime":s.NmapStartTime,
+				"nmap_endtime":s.NmapEndTime,
 				"scantime":  fmt.Sprintf("%.2f", float64(EndTime)/1000-float64(StartTime)/1000),
 			},
 			Time: lib.GetUnixTime(),
@@ -130,7 +143,7 @@ func (s *Scanner) NmapDistribute() {
 	dataTcp := masscan.Host{}
 	s.wg = &sync.WaitGroup{}
 
-	poolNmap, _ = ants.NewPoolWithFunc(30, func(i interface{}) {
+	poolNmap, _ = ants.NewPoolWithFunc(s.Conf.S.NmapNum, func(i interface{}) {
 		defer s.wg.Done()
 		results, _ := s.NmapRun(i.(masscan.Host).Address.Addr, i.(masscan.Host).Ports[0].Portid, i.(masscan.Host).Ports[0].Protocol)
 		s.judgeExist(results, i.(masscan.Host))
@@ -155,13 +168,13 @@ func (s *Scanner) NmapDistribute() {
 	s.EndTime = lib.GetUnixTime()
 }
 
-func (s *Scanner) GetLastScanTime(dataType string) (string, string) {
+func (s *Scanner) GetLastScanTime(dataType string) (int, int) {
 	res, err := Client.Search("scan*").Type(dataType).Sort("time", false).Size(1).Do(context.Background())
 	if err != nil {
 		lib.FatalError(err.Error())
 	}
 	if res.TotalHits() == 0 {
-		return "", ""
+		return 0, 0
 	}
 	data := &ScanHistoryData{}
 	for _, v := range res.Hits.Hits {
@@ -172,9 +185,9 @@ func (s *Scanner) GetLastScanTime(dataType string) (string, string) {
 	return data.T.StartTime, data.T.EndTime
 }
 
-func (s *Scanner) MasDistribute(lastScanTime string, lastScanEndTime string) {
+func (s *Scanner) MasDistribute(lastScanTime int, lastScanEndTime int) {
 	wg := &sync.WaitGroup{}
-	pool, _ := ants.NewPoolWithFunc(5, func(i interface{}) {
+	pool, _ := ants.NewPoolWithFunc(s.Conf.S.MasNum, func(i interface{}) {
 		defer wg.Done()
 		s.MasRun(i.(*masscan.Masscan))
 		return
@@ -188,6 +201,7 @@ func (s *Scanner) MasDistribute(lastScanTime string, lastScanEndTime string) {
 		pool.Invoke(m)
 	}
 	wg.Wait()
+	s.MasEndTime = lib.GetUnixTime()
 	close(s.tcpCh)
 }
 

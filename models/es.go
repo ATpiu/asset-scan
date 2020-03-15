@@ -184,6 +184,24 @@ var addhistory = `
 							"type": "keyword"
 						}
 					}
+				},
+				"nmap_starttime": {
+					"type": "date"
+				},
+				"nmap_endtime": {
+					"type": "date"
+				},
+				"nmap_time": {
+					"type": "integer"
+				},
+				"masscan_starttime": {
+					"type": "date"
+				},
+				"masscan_endtime": {
+					"type": "date"
+				},
+				"masscan_time": {
+					"type": "integer"
 				}
 			}
 		},
@@ -267,7 +285,7 @@ var uphistory = `
 						}
 					}
 				},
-				"pott": {
+				"port": {
 					"type": "integer",
 					"fields": {
 						"keyword": {
@@ -469,8 +487,8 @@ type Data struct {
 }
 
 type DataScanHistory struct {
-	StartTime string `json:"starttime"`
-	EndTime   string `json:"endtime"`
+	StartTime int `json:"starttime"`
+	EndTime   int `json:"endtime"`
 }
 
 type ScanHistoryData struct {
@@ -547,7 +565,7 @@ func newIndex(name string) {
 	}
 }
 
-func isExist(ip string, port string, protocol string, service string, product string, version string, lastScanTime string, lastScanEndTime string) (bool, *elastic.SearchHit) {
+func isExist(ip string, port string, protocol string, service string, product string, version string, lastScanTime int, lastScanEndTime int) (bool, *elastic.SearchHit) {
 	query := elastic.NewBoolQuery()
 	if ip != "" {
 		query.Must(elastic.NewTermQuery("data.ip", ip))
@@ -567,7 +585,7 @@ func isExist(ip string, port string, protocol string, service string, product st
 	//if version != "" {
 	//	query.Must(elastic.NewMatchQuery("data.version", version))
 	//}
-	if lastScanTime != "" && lastScanEndTime != "" {
+	if lastScanTime != 0 && lastScanEndTime != 0 {
 		query.Must(elastic.NewRangeQuery("time").From(lastScanTime).To(lastScanEndTime))
 	}
 	res, err := Client.Search("scan*").Type("result").Query(query).Size(1).Do(context.Background())

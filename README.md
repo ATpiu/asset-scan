@@ -45,6 +45,8 @@ scan:
   ipFile: ip.txt                 #包含扫描的ip范围文件，文件内容格式参照nmap -iL参数所支持的格式
   ipexcludeFile: ipExclude.txt   #包含需排除的ip范围文件，文件内容格式参照nmap --excludefile参数所支持的格式
   port: 1-65535                  #扫描端口范围
+  mas_num:                       #同时可运行的最大masscan数
+  nmap_num:                      #同时可运行的最大nmap数
   userDict: user.txt             #对服务进行弱口令爆破的用户名字典
   passwordDict: password.txt     #对服务进行弱口令爆破的密码字典
   scan_interval: 30              #扫描间隔，单位：秒
