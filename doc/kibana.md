@@ -7,7 +7,7 @@
 
 ## 模板Dashboard说明
 
-![](./key dashboard.png)
+![](key_dashboard.png)
 
 有了扫描的基础数据，即可通过kibana来自定义各类表盘，为我们安全人员服务，产生价值
 在此以模板Dashboard为例，说明上图每个图表作用：
