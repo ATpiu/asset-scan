@@ -1,7 +1,7 @@
 # kibana图表模板
 ## 模板导入
 
-- 访问http://xx.xx.xx.xx:5601（kibana所在ip地址）,左侧菜单单击`Management`，然后选择`Saved Objects`
+- 访问`http://xx.xx.xx.xx:5601`（kibana所在ip地址）,左侧菜单单击`Management`，然后选择`Saved Objects`
 
 - 在新出现页面右上角点击`Import`，选择[release](https://github.com/ATpiu/asset-scan/releases)压缩包中的`dashboard.json`，导入dashboard模板。再次点击`Import`，导入压缩包中的`visualize.json`，导入visualize模板。
 

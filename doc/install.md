@@ -73,7 +73,7 @@ wget https://artifacts.elastic.co/downloads/kibana/kibana-5.6.8-linux-x86_64.tar
 server.host: "0.0.0.0"
 ```
 
-- 输入`nohup /opt/kibana-5.6.8-linux-x86_64/bin/kibana > /dev/null 2>&1 &`,开启kibana
+- 输入`nohup /opt/kibana-5.6.8-linux-x86_64/bin/kibana > /dev/null 2>&1 &`,开启kibana 
 
-- 浏览器中输入：http://xx.xx.xx.xx:5601（kibana所在ip地址），访问成功后，点击左侧菜单栏`Management`,配置索引。
+- 浏览器中输入：`http://xx.xx.xx.xx:5601`（kibana所在ip地址），访问成功后，点击左侧菜单栏`Management`,配置索引。
 在`Index pattern`中输入`scan-*`，`Time Filter field name`下拉框选择`time`字段，即完成kibana的配置
