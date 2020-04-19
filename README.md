@@ -18,14 +18,15 @@ asset-scan用于甲方企业外网资产进行周期性扫描监控，对资产�
 
 - 周期性扫描监控
 - 自动化未授权访问/弱口令爆破
-- 支持扫描白名单、配置热更新和告警控制
-- 搜索、自定义统计图、多维度分析
+- 支持扫描速度、白名单、配置热更新和告警控制
+- 搜索、自定义统计图、多维度分析、结果导出EXCEL
 
 ## 图例展示
 
--- 配合Kibana强大的分析统计功能，各位可自定义其它统计图和表盘
+配合Kibana强大的分析统计功能，各位可自定义其它统计图和表盘
 
 ![](./doc/dashboard.png)
+![](./doc/IP开放高危服务表.png)
 
 
 ## 配置文件说明
@@ -45,8 +46,8 @@ scan:
   ipFile: ip.txt                 #包含扫描的ip范围文件，文件内容格式参照nmap -iL参数所支持的格式
   ipexcludeFile: ipExclude.txt   #包含需排除的ip范围文件，文件内容格式参照nmap --excludefile参数所支持的格式
   port: 1-65535                  #扫描端口范围
-  mas_num:                       #同时可运行的最大masscan数
-  nmap_num:                      #同时可运行的最大nmap数
+  mas_num: 1                     #同时可运行的最大masscan数
+  nmap_num: 20                   #同时可运行的最大nmap数
   userDict: user.txt             #对服务进行弱口令爆破的用户名字典
   passwordDict: password.txt     #对服务进行弱口令爆破的密码字典
   scan_interval: 30              #扫描间隔，单位：秒
@@ -66,9 +67,13 @@ mail:                            #告警邮箱设置，若观察者模式始终�
 ## 运行指南
 
 - Linux环境运行，需要Nmap、Masscan、Es和Kibana 5.6.x版本，安装指南详见：[安装指南](./doc/install.md)
-- 所需组件安装完毕后，从release中下载压缩包，对config.yaml进行配置，ip.txt中填入要扫描的IP段（格式参照nmap -iL参数所支持的格式），之后可直接输入`./asset-scan`运行
+- 所需组件安装完毕后，从[release](https://github.com/ATpiu/asset-scan/releases)中下载压缩包，对config.yaml进行配置，ip.txt中填入要扫描的IP段（格式参照nmap -iL参数所支持的格式），之后可直接输入`./asset-scan`运行
 - 扫描初期，建议将config.yaml中的观察者模式开关设为`on`,避免造成告警轰炸（有新服务对外开放或暴力破解成功会发告警邮件）
 - ipExclude.txt中为要排除扫描的IP段，user.txt和password.txt分别为用户名字典和密码字典
+
+## kibana图表模板
+
+- 有一些同学联系到作者希望能提供kibana图表模板，因此作者提供一个自己的kibana图表模板，方便大家查看效果及参考学习，详见：[图表模板](./doc/kibana.md)
 
 ## Es字段说明
 
